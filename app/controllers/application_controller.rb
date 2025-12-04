@@ -6,4 +6,16 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
+
+  helper_method :current_user
+
+  def current_user
+    User.find_by(id: cookies.signed[:user_id])
+  end
+
+  def authenticate_user
+    unless current_user
+      render json: {error: "unauthenticated user"}, status: :unauthorized
+    end
+  end
 end

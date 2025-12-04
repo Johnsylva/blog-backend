@@ -1,4 +1,8 @@
 class PostsController < ApplicationController
+  # callback
+  #run the authenticate_user for every action except the index action
+  before_action :authenticate_user, except: [:index]
+
   def index
     posts = Post.all.order(:id)
     render json: posts
@@ -9,6 +13,7 @@ class PostsController < ApplicationController
       title: params[:title],
       body: params[:body],
       image: params[:image],
+      user_id: current_user.id
     )
     if post.save
       render json: post
