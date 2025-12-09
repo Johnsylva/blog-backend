@@ -18,4 +18,17 @@ class ApplicationController < ActionController::Base
       render json: {error: "unauthenticated user"}, status: :unauthorized
     end
   end
+
+  def authenticate_admin
+    unless current_user && current_user.admin
+      render json: { error: "Unauthorized - must be an admin"}, status: :unauthorized
+    end
+  end
+
+  def authorize_post_owner
+    post = Post.find(params[:id])
+    unless current_user.admin || post.user_id == current_user.id
+      render json: { message: "You don't have permission to modify this post." }, status: :unauthorized
+    end
+  end
 end

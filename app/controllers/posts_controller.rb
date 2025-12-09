@@ -1,7 +1,12 @@
 class PostsController < ApplicationController
   # callback
   #run the authenticate_user for every action except the index action
-  before_action :authenticate_user, except: [:index]
+  before_action :authenticate_user, except: [:index, :show]
+  # authenticate user will run for create, update, and destroy
+  # authenticate admin will run for update and destroy
+  before_action :authorize_post_owner, only: [:update, :destroy]
+  #anyone can see the data - index and show
+  #only admins can updata or destroy
 
   def index
     posts = Post.all.order(:id)
@@ -32,6 +37,7 @@ class PostsController < ApplicationController
     post.title = params[:title] || post.title
     post.body = params[:body] || post.body
     post.image = params[:image] || post.image
+    post.user_id = params[:user_id] || post.user_id
     if post.save
       render json: post
     else
