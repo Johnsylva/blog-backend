@@ -22,4 +22,6 @@ Rails.application.routes.draw do
 
   post "/sessions" => "sessions#create"
   delete "/sessions" => "sessions#destroy"
+
+  get "/tags" => "tags#index"
 end
