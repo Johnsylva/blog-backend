@@ -27,9 +27,14 @@ class PostsController < ApplicationController
       user_id: current_user.id
     )
     if @post.save
+
+      if params[:tag_id] && params[:tag_id] != ""
+        PostTag.create(post_id: @post.id, tag_id: params[:tag_id])
+      end
+
       render :show
     else
-      render json: { errors: post.errors.full_messages }, status: :bad_request
+      render json: { errors: @post.errors.full_messages }, status: :bad_request
     end
   end
 
