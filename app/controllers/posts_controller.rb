@@ -52,7 +52,7 @@ class PostsController < ApplicationController
     if @post.save
       render :show
     else
-      render json: { errors: post.errors.full_messages }, status: :bad_request
+      render json: { errors: @post.errors.full_messages }, status: :bad_request
     end
   end
 
